@@ -1,0 +1,36 @@
+# Commander Scala
+
+A scalable command-line parser inspired by [commander.js](https://github.com/tj/commander.js).
+
+**Work in progress**
+
+## Option parsing
+
+ Options with commander are defined with the `.option()` method, also serving as documentation for the options. The example below parses args and options from `args`, leaving remaining args as the `program.args` array which were not consumed by options.
+
+```scala
+object App {
+  def main(args: Array[String]) { 
+    var program = new Program()
+    program
+      .version("0.0.1")
+      .option("-p, --peppers", "Add peppers")
+      .option("-P, --pineapple", "Add pineapple")
+      .option("-b, --bbq-sauce", "Add bbq sauce")
+      .option("-c, --cheese [type]", "Add the specified type of cheese [marble]", default="marble")
+      .parse(args)
+
+    println("you ordered a pizza with:")
+    if (program.peppers) println("  - peppers")
+    if (program.pineapple) println("  - pineapple")
+    if (program.bbqSauce) println("  - bbq")
+    println("  - " + program.cheese + " cheese")
+  }
+}
+```
+
+## License
+
+MIT (see LICENSE)
+
+Copyright © 2015, Tony Crisci
