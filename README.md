@@ -37,7 +37,6 @@ Make issues on Github to report bugs or suggest new features. Let me know if you
 
 Here are some things that need to be done.
 
-* Help string
 * Git-style commands
 * Coercion functions
 * Publish to Maven

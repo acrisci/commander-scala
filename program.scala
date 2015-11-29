@@ -8,6 +8,7 @@ class Program() extends Dynamic {
   var options: List[Option] = Nil
   var unknownArgs: List[String] = Nil
   var argv = new Array[String](0)
+  var description = ""
 
   def version(v: String): Program = {
     version = v
@@ -48,6 +49,8 @@ class Program() extends Dynamic {
     this.argv = argv
     var normalizedArgs = normalize(argv)
     var lastOpt: Option = null
+
+    outputHelpIfNecessary(normalizedArgs)
 
     for (i <- 0 to normalizedArgs.length - 1) {
       var arg = normalizedArgs(i)
@@ -119,5 +122,62 @@ class Program() extends Dynamic {
      .reduce((str, word) => {
        str + word.capitalize
      })
+  }
+
+  def helpString(): String = {
+    // XXX is this how you get the file name?
+    var programName = new Exception().getStackTrace()(1).getFileName
+    if (programName.endsWith(".scala")) {
+      programName = programName.take(programName.lastIndexOf("."))
+    }
+
+    var help = new StringBuilder()
+
+    // usage information
+    help
+      .append("\n  Usage: ")
+      .append(programName)
+      .append(" [options] \n")
+
+    // description
+    if (description != "") {
+      help
+        .append("\n  ")
+        .append(description)
+        .append("\n")
+    }
+
+    // options
+    help.append("\n  Options:\n\n")
+    var width = options.map(_.flags.length).max
+
+    // add help option
+    help
+      .append("    ")
+      .append("-h, --help".padTo(width, " ").mkString)
+      .append("  output usage information\n")
+
+    options.foreach((option) => {
+      help
+        .append("    ")
+        .append(option.flags.padTo(width, " ").mkString)
+        .append("  ")
+        .append(option.description)
+        .append("\n")
+    })
+
+    help.result
+  }
+
+  def help() = {
+    print(helpString)
+    // XXX throws sbt.TrapExitSecurityException on `sbt run`
+    sys.exit(0)
+  }
+
+  def outputHelpIfNecessary(args: Array[String]) = {
+    if (args.contains("--help") || args.contains("-h")) {
+      help
+    }
   }
 }
