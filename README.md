@@ -29,6 +29,22 @@ object App {
 }
 ```
 
+## Contributing
+
+Make issues on Github to report bugs or suggest new features. Let me know if you are working on something. Right now, I plan on staying as close to commander.js as is practical. However, I will change the api slightly where it makes sense given that Scala is very different from JavaScript. I also might add some features from other argument parsers that I like.
+
+### ToDo
+
+Here are some things that need to be done.
+
+* Help string
+* Git-style commands
+* Coercion functions
+* Publish to Maven
+* Argument validation
+* Test suite
+* Scala docs and examples
+
 ## License
 
 MIT (see LICENSE)
