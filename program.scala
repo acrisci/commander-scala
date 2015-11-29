@@ -61,10 +61,10 @@ class Program() extends Dynamic {
         if (lastOpt.hasParam) {
           optionValueMap = optionValueMap + (camelcase(lastOpt.name) -> arg)
         } else {
-          unknownArgs = arg :: unknownArgs
+          unknownArgs = unknownArgs :+ arg
         }
       } else {
-          unknownArgs = arg :: unknownArgs
+          unknownArgs = unknownArgs :+ arg
       }
 
       lastOpt = opt
