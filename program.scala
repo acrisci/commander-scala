@@ -6,7 +6,7 @@ class Program() extends Dynamic {
   // list of dynamic properties
   var optionValueMap = Map.empty[String, Any]
   var options: List[Option] = Nil
-  var unknownArgs: List[String] = Nil
+  var args: List[String] = Nil
   var argv = new Array[String](0)
   var description = ""
 
@@ -64,10 +64,10 @@ class Program() extends Dynamic {
         if (lastOpt.hasParam) {
           optionValueMap = optionValueMap + (camelcase(lastOpt.name) -> arg)
         } else {
-          unknownArgs = unknownArgs :+ arg
+          args = args :+ arg
         }
       } else {
-          unknownArgs = unknownArgs :+ arg
+          args = args :+ arg
       }
 
       lastOpt = opt
