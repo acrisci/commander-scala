@@ -31,16 +31,12 @@ class Program() extends Dynamic {
     // register the option
     options = opt :: options
 
-    var defaultValue: Any = null
-
     if (default == null && !opt.hasParam) {
       // default to false instead of null for options without parameters
-      defaultValue = false
+      optionValueMap = optionValueMap + (camelcase(opt.name) -> false)
     } else {
-      defaultValue = default
+      optionValueMap = optionValueMap + (camelcase(opt.name) -> default)
     }
-
-    optionValueMap = optionValueMap + (camelcase(opt.name) -> defaultValue)
 
     this
   }
