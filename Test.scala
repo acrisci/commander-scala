@@ -12,6 +12,7 @@ object Test {
       .option("-l, --olives [type]", "Add olives")
       .option("-L, --lettuce [type]", "Add lettuce", default="iceberg")
       .option("-P, --pickles [type]", "Add pickles")
+      .option("-t, --tomatoes <type>", "Add tomatoes")
       .option("-n, --num [num]", "Number of pizzas", default=1, fn=(_.toInt))
   }
 
@@ -67,7 +68,7 @@ object Test {
       .option("-p, --peppers", "Add peppers")
 
       var helpString = """
-  Usage: test [options]
+  Usage: Test [options]
 
   Options:
 
