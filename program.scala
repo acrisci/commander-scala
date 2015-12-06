@@ -33,7 +33,7 @@ class Program() extends Dynamic {
     // register the option
     options = opt :: options
 
-    if (default == null && !opt.hasParam) {
+    if (default == null && !opt.takesParam) {
       // default to false instead of null for options without parameters
       optionValueMap = optionValueMap + (camelcase(opt.name) -> false)
     } else {
@@ -55,11 +55,11 @@ class Program() extends Dynamic {
       var opt = optionFor(arg)
 
       if (opt != null) {
-        if (!opt.hasParam) {
+        if (!opt.takesParam) {
           optionValueMap = optionValueMap + (camelcase(opt.name) -> opt.defaultValue)
         }
       } else if (lastOpt != null) {
-        if (lastOpt.hasParam) {
+        if (lastOpt.takesParam) {
           try {
             optionValueMap = optionValueMap + (camelcase(lastOpt.name) -> lastOpt.fn(arg))
           } catch {

@@ -25,5 +25,5 @@ class Option(var flags: String, var description: String, var fn: String => Any =
     return arg == short || arg == long
   }
 
-  def hasParam(): Boolean = required || optional
+  def takesParam(): Boolean = required || optional
 }
