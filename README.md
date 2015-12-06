@@ -39,7 +39,6 @@ Here are some things that need to be done.
 
 * Git-style commands
 * Publish to Maven
-* Argument validation
 * Test suite
 * Scala docs and examples
 

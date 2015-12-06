@@ -43,6 +43,14 @@ object Test {
         var program = testProgram.parse(Array("--uknown-option"))
       }
     }
+
+    withClue("a missing required option should throw an error") {
+      intercept[ProgramParseException] {
+        var program = new Program(exitOnError=false)
+          .option("-r, --required-option", "A required option", required=true)
+          .parse(Array())
+      }
+    }
   }
 
   def testParse() = {

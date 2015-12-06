@@ -29,8 +29,8 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     opt.value
   }
 
- def option(flags: String, description: String, default: Any = null, fn: String => Any = identity): Program = {
-    var opt = new Option(flags, description, default=default, fn=fn)
+ def option(flags: String, description: String, default: Any = null, required: Boolean = false, fn: String => Any = identity): Program = {
+    var opt = new Option(flags, description, default=default, required=required, fn=fn)
 
     // register the option
     options = opt :: options
@@ -98,7 +98,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
 
       if (arg == "--") {
         // TODO honor option terminator
-      } else if (lastOpt != null && lastOpt.required) {
+      } else if (lastOpt != null && lastOpt.paramRequired) {
         ret = ret :+ arg
       } else if (arg.length > 1 && arg.startsWith("-") && '-' != arg(1)) {
         arg.tail.foreach((c) => ret = ret :+ "-" + c)
@@ -191,9 +191,16 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
   }
 
   def validateOptions = {
-    options.foreach((o) => if (o.present && o.required && !o.givenParam) {
-      val message = "argument missing for %s".format(o.name)
-      exitWithError(message)
+    options.foreach((o) => {
+      if (o.present && o.paramRequired && !o.givenParam) {
+        // it was not given a required param
+        val message = "argument missing for %s".format(o.name)
+        exitWithError(message)
+      } else if (!o.present && o.required) {
+        // option is required and not given
+        val message = "option missing: %s".format(o.name)
+        exitWithError(message)
+      }
     })
   }
 
