@@ -16,7 +16,9 @@ class Program() extends Dynamic {
   }
 
   def selectDynamic(name: String) = {
-    optionValueMap get name getOrElse sys.error("option '%s' not found".format(name))
+    optionValueMap
+      .get(name)
+      .getOrElse(sys.error("option '%s' not found".format(name)))
   }
 
   /*
