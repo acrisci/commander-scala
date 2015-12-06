@@ -1,7 +1,8 @@
+import org.scalatest.Assertions._
+
 object Test {
-  def main(args: Array[String]) { 
-    var fakeArgs = Array("-po", "unknown1", "--bbq-sauce=sweet", "--cheese", "cheddar", "-l", "black", "unknown2", "unknown3", "-n", "10")
-    var program = new Program()
+  def testProgram: Program = {
+    new Program()
       .version("1.0.0")
       .option("-p, --peppers", "Add peppers")
       .option("-o, --onions", "Add onions")
@@ -10,28 +11,33 @@ object Test {
       .option("-c, --cheese [type]", "Add cheese", default="pepper jack")
       .option("-l, --olives [type]", "Add olives")
       .option("-n, --num [num]", "Number of pizzas", default=1, fn=(_.toInt))
-      .parse(fakeArgs)
+  }
 
-    var peppers = program.peppers
-    println("peppers: " + peppers)
-    var bbqSauce = program.bbqSauce
-    if (bbqSauce == "sweet") {
-      println("you ordered bbq sweet")
+  def testParse() = {
+    var fakeArgs = Array("-po", "unknown1", "--bbq-sauce=sweet", "--cheese", "cheddar", "-l", "black", "unknown2", "unknown3", "-n", "10")
+    var program = testProgram.parse(fakeArgs)
+
+    assertResult(program.peppers, "peppers was given in a combined short opt") { true }
+
+    assertResult(program.bbqSauce, "bbq sauce was given as a long opt with equals sign") { "sweet" }
+
+    assertResult(program.cheese, "cheese was given as a long opt") { "cheddar" }
+
+    assertResult(program.onions, "onions was given in a combined short opt") { true }
+
+    assertResult(program.anchovies, "anchovies has no param and was not present") { false }
+
+    assertResult(program.olives, "olives was given a param as a short opt") { "black" }
+
+    assertResult(program.num.getClass.getName, "num was coerced to an int") { "java.lang.Integer" }
+    assertResult(program.num, "num should be parsed as an int") { 10 }
+
+    assertResult(program.args, "args should contain the unknown args") {
+      List("unknown1", "unknown2", "unknown3")
     }
-    println("bbqSauce: " + bbqSauce)
-    var cheese = program.cheese
-    println("cheese: " + program.cheese)
-    var onions = program.onions
-    println("onions: " + program.onions)
-    var anchovies = program.anchovies
-    println("anchovies: " + program.anchovies)
-    var olives = program.olives
-    println("olives: " + program.olives)
-    //println(peppers.asInstanceOf[List[Int]](0))
-    var num = program.num
-    println("num is a : " + num.getClass.getName)
-    println("number of pizzas: " + num)
-    var unknownArgs = program.args
-    println("unknown args: " + unknownArgs)
+  }
+
+  def main(args: Array[String]) { 
+    testParse
   }
 }
