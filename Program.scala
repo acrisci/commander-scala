@@ -2,9 +2,9 @@ import scala.language.dynamics
 
 class Program(exitOnError: Boolean = true) extends Dynamic {
   var version: String = ""
-  var options: List[Option] = Nil
+  private var options: List[Option] = Nil
   var args: List[String] = Nil
-  var argv = new Array[String](0)
+  private var argv = new Array[String](0)
   var description = ""
 
   def version(v: String): Program = {

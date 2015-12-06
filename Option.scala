@@ -1,9 +1,9 @@
 class Option(var flags: String, var description: String, var default: Any = null, var required: Boolean = false, var fn: String => Any = identity) {
   var paramRequired: Boolean = flags.contains("<")
   var paramOptional: Boolean = flags.contains("[")
-  var flagsList = splitFlags(flags)
-  var short = ""
-  var long = ""
+  private var flagsList = splitFlags(flags)
+  private var short = ""
+  private var long = ""
   var givenParam = false
   var present = false
 
