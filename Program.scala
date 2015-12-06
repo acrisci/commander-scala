@@ -86,7 +86,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     this
   }
 
-  def normalize(args: Array[String]): Array[String] = {
+  private def normalize(args: Array[String]): Array[String] = {
     var ret :Array[String] = new Array[String](0)
     for (i <- 0 to args.length - 1) {
       var arg = args(i)
@@ -115,7 +115,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     return ret
   }
 
-  def optionFor(arg: String): Option = {
+  private def optionFor(arg: String): Option = {
     for (i <- 0 to options.length - 1) {
       if (options(i).is(arg)) {
         return options(i)
@@ -125,7 +125,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     return null
   }
 
-  def camelcase(flag: String): String = {
+  private def camelcase(flag: String): String = {
    flag.split('-')
      .filter(_ != "")
      .reduce((str, word) => {
@@ -184,13 +184,13 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     sys.exit(0)
   }
 
-  def outputHelpIfNecessary(args: Array[String]) = {
+  private def outputHelpIfNecessary(args: Array[String]) = {
     if (args.contains("--help") || args.contains("-h")) {
       help
     }
   }
 
-  def validateOptions = {
+  private def validateOptions = {
     options.foreach((o) => {
       if (o.present && o.paramRequired && !o.givenParam) {
         // it was not given a required param
@@ -204,7 +204,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     })
   }
 
-  def exitWithError(message: String, e: Exception = null) = {
+  private def exitWithError(message: String, e: Exception = null) = {
     if (exitOnError) {
       println(message)
       sys.exit(1)

@@ -22,7 +22,7 @@ class Option(var flags: String, var description: String, var default: Any = null
     value = false
   }
 
-  def splitFlags(flags: String) :Array[String] = {
+  private def splitFlags(flags: String) :Array[String] = {
     "[ ,|]+".r.split(flags)
   }
 
