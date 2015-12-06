@@ -28,6 +28,8 @@ object Test {
     var fakeArgs = Array("-po", "unknown1", "--bbq-sauce=sweet", "--cheese", "cheddar", "-l", "black", "unknown2", "unknown3", "-n", "10")
     var program = testProgram.parse(fakeArgs)
 
+    assertResult(program.version, "version should be set") { "1.0.0" }
+
     assertResult(program.peppers, "peppers was given in a combined short opt") { true }
 
     assertResult(program.bbqSauce, "bbq sauce was given as a long opt with equals sign") { "sweet" }
