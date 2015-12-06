@@ -22,6 +22,13 @@ object Test {
         testProgram.parse(Array("-n", "invalid"))
       }
     }
+
+    withClue("accessing a program option value that does not exist should error") {
+      intercept[RuntimeException] {
+        var program = testProgram.parse(Array())
+        var notAnOptionValue = program.notAnOptionValue
+      }
+    }
   }
 
   def testParse() = {
