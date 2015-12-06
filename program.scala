@@ -141,7 +141,7 @@ class Program() extends Dynamic {
     help
       .append("\n  Usage: ")
       .append(programName)
-      .append(" [options] \n")
+      .append(" [options]\n")
 
     // description
     if (description != "") {

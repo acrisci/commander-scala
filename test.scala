@@ -40,7 +40,25 @@ object Test {
     }
   }
 
+  def testHelpString = {
+    var program = new Program()
+      .version("1.0.0")
+      .option("-p, --peppers", "Add peppers")
+
+      assertResult(program.helpString, "program should have a useful help string") {
+        """
+  Usage: test [options]
+
+  Options:
+
+    -h, --help     output usage information
+    -p, --peppers  Add peppers
+"""
+      }
+  }
+
   def main(args: Array[String]) { 
     testParse
+    testHelpString
   }
 }
