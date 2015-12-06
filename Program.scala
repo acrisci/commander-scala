@@ -1,6 +1,5 @@
 import scala.language.dynamics
 
-//class Program(xc: Int, yc: Int) {
 class Program(exitOnError: Boolean = true) extends Dynamic {
   var version: String = ""
   var options: List[Option] = Nil
@@ -29,12 +28,6 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
 
     opt.value
   }
-
-  /*
-  def updateDynamic(name: String)(value: Any) {
-    map += name -> value
-  }
-  */
 
  def option(flags: String, description: String, default: Any = null, fn: String => Any = identity): Program = {
     var opt = new Option(flags, description, default=default, fn=fn)
@@ -129,7 +122,6 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
       }
     }
 
-    // XXX option not found?
     return null
   }
 
