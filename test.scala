@@ -11,6 +11,7 @@ object Test {
       .option("-c, --cheese [type]", "Add cheese", default="pepper jack")
       .option("-l, --olives [type]", "Add olives")
       .option("-L, --lettuce [type]", "Add lettuce", default="iceberg")
+      .option("-P, --pickles [type]", "Add pickles")
       .option("-n, --num [num]", "Number of pizzas", default=1, fn=(_.toInt))
   }
 
@@ -50,6 +51,8 @@ object Test {
     assertResult("black", "olives was given a param as a short opt") { program.olives }
 
     assertResult("iceberg", "lettuce was not given, but has a default") { program.lettuce }
+
+    assertResult(null, "pickles was not given and has no default") { program.pickles }
 
     assertResult("java.lang.Integer", "num was coerced to an int") { program.num.getClass.getName }
     assertResult(10, "num should be parsed as an int") { program.num }
