@@ -14,6 +14,16 @@ object Test {
       .option("-n, --num [num]", "Number of pizzas", default=1, fn=(_.toInt))
   }
 
+  def testErrors = {
+    withClue("coercion to int should throw an exception when invalid number is given") {
+      intercept[NumberFormatException] {
+        // default program behavior should exit instead of throw the exception.
+        // it throws the exception because exitOnError is false
+        testProgram.parse(Array("-n", "invalid"))
+      }
+    }
+  }
+
   def testParse() = {
     var fakeArgs = Array("-po", "unknown1", "--bbq-sauce=sweet", "--cheese", "cheddar", "-l", "black", "unknown2", "unknown3", "-n", "10")
     var program = testProgram.parse(fakeArgs)
@@ -60,5 +70,6 @@ object Test {
   def main(args: Array[String]) { 
     testParse
     testHelpString
+    testErrors
   }
 }
