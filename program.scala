@@ -25,8 +25,8 @@ class Program() extends Dynamic {
   }
   */
 
-  def option(flags: String, description: String, default: Any = null): Program = {
-    var opt = new Option(flags, description)
+ def option(flags: String, description: String, default: Any = null, fn: String => Any = identity): Program = {
+    var opt = new Option(flags, description, fn=fn)
 
     // register the option
     options = opt :: options
@@ -58,7 +58,7 @@ class Program() extends Dynamic {
         }
       } else if (lastOpt != null) {
         if (lastOpt.hasParam) {
-          optionValueMap = optionValueMap + (camelcase(lastOpt.name) -> arg)
+          optionValueMap = optionValueMap + (camelcase(lastOpt.name) -> lastOpt.fn(arg))
         } else {
           args = args :+ arg
         }

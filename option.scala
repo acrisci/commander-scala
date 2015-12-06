@@ -1,4 +1,4 @@
-class Option(var flags: String, var description: String) {
+class Option(var flags: String, var description: String, var fn: String => Any = identity) {
   var required: Boolean = flags.contains("<")
   var optional: Boolean = flags.contains("[")
   var flagsList = splitFlags(flags)
