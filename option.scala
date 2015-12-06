@@ -4,12 +4,21 @@ class Option(var flags: String, var description: String, var default: Any = null
   var flagsList = splitFlags(flags)
   var short = ""
   var long = ""
+  var givenParam = false
 
   if (flagsList.length > 1 && !flagsList(1).matches("""^[\[<].*""")) {
     short = flagsList(0)
     long = flagsList(1)
   } else {
     long = flagsList(0)
+  }
+
+  var value: Any = null
+
+  if (takesParam || default != null) {
+    value = default
+  } else {
+    value = false
   }
 
   def splitFlags(flags: String) :Array[String] = {

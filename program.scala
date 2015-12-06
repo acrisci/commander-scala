@@ -3,8 +3,6 @@ import scala.language.dynamics
 //class Program(xc: Int, yc: Int) {
 class Program(exitOnError: Boolean = true) extends Dynamic {
   var version: String = ""
-  // list of dynamic properties
-  var optionValueMap = Map.empty[String, Any]
   var options: List[Option] = Nil
   var args: List[String] = Nil
   var argv = new Array[String](0)
@@ -16,9 +14,20 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
   }
 
   def selectDynamic(name: String) = {
-    optionValueMap
-      .get(name)
-      .getOrElse(sys.error("option '%s' not found".format(name)))
+    // find the option
+    var opt: Option = null
+
+    for (i <- 0 to options.length - 1) {
+      if (camelcase(options(i).name) == name) {
+        opt = options(i)
+      }
+    }
+
+    if (opt == null) {
+      sys.error("option '%s' not found".format(name))
+    }
+
+    opt.value
   }
 
   /*
@@ -32,13 +41,6 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
 
     // register the option
     options = opt :: options
-
-    if (default == null && !opt.takesParam) {
-      // default to false instead of null for options without parameters
-      optionValueMap = optionValueMap + (camelcase(opt.name) -> false)
-    } else {
-      optionValueMap = optionValueMap + (camelcase(opt.name) -> opt.default)
-    }
 
     this
   }
@@ -56,12 +58,14 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
 
       if (opt != null) {
         if (!opt.takesParam) {
-          optionValueMap = optionValueMap + (camelcase(opt.name) -> (if (opt.default == null) true else false))
+          // XXX I'm not sure how default values should work for booleans yet
+          opt.value = (if (opt.default == null) true else opt.default)
         }
       } else if (lastOpt != null) {
         if (lastOpt.takesParam) {
           try {
-            optionValueMap = optionValueMap + (camelcase(lastOpt.name) -> lastOpt.fn(arg))
+            lastOpt.givenParam = true
+            lastOpt.value = lastOpt.fn(arg)
           } catch {
             case e: Exception => {
               exitWithError("Could not parse option: %s".format(lastOpt.name), e)
@@ -76,6 +80,8 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
 
       lastOpt = opt
     }
+
+    // TODO validate that required args were given
 
     this
   }
