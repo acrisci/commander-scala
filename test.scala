@@ -10,6 +10,7 @@ object Test {
       .option("-b, --bbq-sauce <type>", "Add bbq sauce")
       .option("-c, --cheese [type]", "Add cheese", default="pepper jack")
       .option("-l, --olives [type]", "Add olives")
+      .option("-L, --lettuce [type]", "Add lettuce", default="iceberg")
       .option("-n, --num [num]", "Number of pizzas", default=1, fn=(_.toInt))
   }
 
@@ -28,6 +29,8 @@ object Test {
     assertResult(program.anchovies, "anchovies has no param and was not present") { false }
 
     assertResult(program.olives, "olives was given a param as a short opt") { "black" }
+
+    assertResult(program.lettuce, "lettuce was not given, but has a default") { "iceberg" }
 
     assertResult(program.num.getClass.getName, "num was coerced to an int") { "java.lang.Integer" }
     assertResult(program.num, "num should be parsed as an int") { 10 }
