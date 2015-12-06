@@ -196,14 +196,16 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
   def validateOptions = {
     options.foreach((o) => if (o.present && o.required && !o.givenParam) {
       val message = "argument missing for %s".format(o.name)
-      exitWithError(message , new ProgramParseException(message))
+      exitWithError(message)
     })
   }
 
-  def exitWithError(message: String, e: Exception) = {
-    println(message)
+  def exitWithError(message: String, e: Exception = null) = {
     if (exitOnError) {
+      println(message)
       sys.exit(1)
+    } else if (e == null) {
+      throw new ProgramParseException(message)
     } else {
       throw e
     }
