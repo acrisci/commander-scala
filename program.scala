@@ -1,7 +1,7 @@
 import scala.language.dynamics
 
 //class Program(xc: Int, yc: Int) {
-class Program() extends Dynamic {
+class Program(exitOnError: Boolean = true) extends Dynamic {
   var version: String = ""
   // list of dynamic properties
   var optionValueMap = Map.empty[String, Any]
@@ -186,8 +186,11 @@ class Program() extends Dynamic {
   }
 
   def exitWithError(message: String, e: Exception) = {
-    // TODO option to throw an exception here instead of exiting
     println(message)
-    sys.exit(1)
+    if (exitOnError) {
+      sys.exit(1)
+    } else {
+      throw e
+    }
   }
 }

@@ -2,7 +2,7 @@ import org.scalatest.Assertions._
 
 object Test {
   def testProgram: Program = {
-    new Program()
+    new Program(exitOnError=false)
       .version("1.0.0")
       .option("-p, --peppers", "Add peppers")
       .option("-o, --onions", "Add onions")
