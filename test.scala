@@ -35,28 +35,27 @@ object Test {
     var fakeArgs = Array("-po", "unknown1", "--bbq-sauce=sweet", "--cheese", "cheddar", "-l", "black", "unknown2", "unknown3", "-n", "10")
     var program = testProgram.parse(fakeArgs)
 
-    assertResult(program.version, "version should be set") { "1.0.0" }
+    assertResult("1.0.0", "version should be set") { program.version }
 
-    assertResult(program.peppers, "peppers was given in a combined short opt") { true }
+    assertResult(true, "peppers was given in a combined short opt") { program.peppers }
 
-    assertResult(program.bbqSauce, "bbq sauce was given as a long opt with equals sign") { "sweet" }
+    assertResult("sweet", "bbq sauce was given as a long opt with equals sign") { program.bbqSauce }
 
-    assertResult(program.cheese, "cheese was given as a long opt") { "cheddar" }
+    assertResult("cheddar", "cheese was given as a long opt") { program.cheese }
 
-    assertResult(program.onions, "onions was given in a combined short opt") { true }
+    assertResult(true, "onions was given in a combined short opt") { program.onions }
 
-    assertResult(program.anchovies, "anchovies has no param and was not present") { false }
+    assertResult(false, "anchovies has no param and was not present") { program.anchovies }
 
-    assertResult(program.olives, "olives was given a param as a short opt") { "black" }
+    assertResult("black", "olives was given a param as a short opt") { program.olives }
 
-    assertResult(program.lettuce, "lettuce was not given, but has a default") { "iceberg" }
+    assertResult("iceberg", "lettuce was not given, but has a default") { program.lettuce }
 
-    assertResult(program.num.getClass.getName, "num was coerced to an int") { "java.lang.Integer" }
-    assertResult(program.num, "num should be parsed as an int") { 10 }
+    assertResult("java.lang.Integer", "num was coerced to an int") { program.num.getClass.getName }
+    assertResult(10, "num should be parsed as an int") { program.num }
 
-    assertResult(program.args, "args should contain the unknown args") {
-      List("unknown1", "unknown2", "unknown3")
-    }
+    assertResult(List("unknown1", "unknown2", "unknown3"),
+                      "args should contain the unknown args") { program.args }
   }
 
   def testHelpString = {
@@ -64,8 +63,7 @@ object Test {
       .version("1.0.0")
       .option("-p, --peppers", "Add peppers")
 
-      assertResult(program.helpString, "program should have a useful help string") {
-        """
+      var helpString = """
   Usage: test [options]
 
   Options:
@@ -73,7 +71,9 @@ object Test {
     -h, --help     output usage information
     -p, --peppers  Add peppers
 """
-      }
+
+      assertResult(helpString, "program should have a useful help string") { program.helpString }
+
   }
 
   def main(args: Array[String]) { 
