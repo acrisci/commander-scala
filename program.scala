@@ -60,7 +60,13 @@ class Program() extends Dynamic {
         }
       } else if (lastOpt != null) {
         if (lastOpt.hasParam) {
-          optionValueMap = optionValueMap + (camelcase(lastOpt.name) -> lastOpt.fn(arg))
+          try {
+            optionValueMap = optionValueMap + (camelcase(lastOpt.name) -> lastOpt.fn(arg))
+          } catch {
+            case e: Exception => {
+              exitWithError("Could not parse option: %s".format(lastOpt.name), e)
+            }
+          }
         } else {
           args = args :+ arg
         }
@@ -177,5 +183,11 @@ class Program() extends Dynamic {
     if (args.contains("--help") || args.contains("-h")) {
       help
     }
+  }
+
+  def exitWithError(message: String, e: Exception) = {
+    // TODO option to throw an exception here instead of exiting
+    println(message)
+    sys.exit(1)
   }
 }
