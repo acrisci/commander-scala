@@ -42,7 +42,6 @@ Here are some things that need to be done.
 * Argument validation
 * Test suite
 * Scala docs and examples
-* Parameterize options to specify type
 
 ## License
 
