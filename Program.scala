@@ -57,6 +57,8 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
       var opt = optionFor(arg)
 
       if (opt != null) {
+        opt.present = true
+
         if (!opt.takesParam) {
           // XXX I'm not sure how default values should work for booleans yet
           opt.value = (if (opt.default == null) true else opt.default)
@@ -81,7 +83,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
       lastOpt = opt
     }
 
-    // TODO validate that required args were given
+    validateOptions
 
     this
   }
@@ -189,6 +191,13 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     if (args.contains("--help") || args.contains("-h")) {
       help
     }
+  }
+
+  def validateOptions = {
+    options.foreach((o) => if (o.present && o.required && !o.givenParam) {
+      val message = "argument missing for %s".format(o.name)
+      exitWithError(message , new ProgramParseException(message))
+    })
   }
 
   def exitWithError(message: String, e: Exception) = {

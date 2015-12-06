@@ -5,6 +5,7 @@ class Option(var flags: String, var description: String, var default: Any = null
   var short = ""
   var long = ""
   var givenParam = false
+  var present = false
 
   if (flagsList.length > 1 && !flagsList(1).matches("""^[\[<].*""")) {
     short = flagsList(0)

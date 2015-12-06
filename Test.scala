@@ -31,6 +31,12 @@ object Test {
         var notAnOptionValue = program.notAnOptionValue
       }
     }
+
+    withClue("giving argument with missing required param should error") {
+      intercept[ProgramParseException] {
+        var program = testProgram.parse(Array("-t"))
+      }
+    }
   }
 
   def testParse() = {
