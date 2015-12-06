@@ -37,6 +37,12 @@ object Test {
         var program = testProgram.parse(Array("-t"))
       }
     }
+
+    withClue("an unknown option should throw an error") {
+      intercept[ProgramParseException] {
+        var program = testProgram.parse(Array("--uknown-option"))
+      }
+    }
   }
 
   def testParse() = {

@@ -56,6 +56,11 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
       var arg = normalizedArgs(i)
       var opt = optionFor(arg)
 
+      if (opt == null && arg.startsWith("-")) {
+        // an unknown option was given
+        exitWithError("unknown option: %s".format(arg))
+      }
+
       if (opt != null) {
         opt.present = true
 
