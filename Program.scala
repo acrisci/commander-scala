@@ -2,7 +2,7 @@ import scala.language.dynamics
 
 class Program(exitOnError: Boolean = true) extends Dynamic {
   var version: String = ""
-  private var options: List[Option] = Nil
+  private var options: List[Opt] = Nil
   var args: List[String] = Nil
   private var argv = new Array[String](0)
   var description = ""
@@ -14,7 +14,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
 
   def selectDynamic(name: String) = {
     // find the option
-    var opt: Option = null
+    var opt: Opt = null
 
     for (i <- 0 to options.length - 1) {
       if (camelcase(options(i).name) == name) {
@@ -30,7 +30,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
   }
 
  def option(flags: String, description: String, default: Any = null, required: Boolean = false, fn: String => Any = identity): Program = {
-    var opt = new Option(flags, description, default=default, required=required, fn=fn)
+    var opt = new Opt(flags, description, default=default, required=required, fn=fn)
 
     // register the option
     options = opt :: options
@@ -41,7 +41,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
   def parse(argv: Array[String]): Program = {
     this.argv = argv
     var normalizedArgs = normalize(argv)
-    var lastOpt: Option = null
+    var lastOpt: Opt = null
 
     outputHelpIfNecessary(normalizedArgs)
 
@@ -90,7 +90,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     var ret :Array[String] = new Array[String](0)
     for (i <- 0 to args.length - 1) {
       var arg = args(i)
-      var lastOpt: Option = null
+      var lastOpt: Opt = null
 
       if (i > 0) {
         lastOpt = optionFor(arg)
@@ -115,7 +115,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     return ret
   }
 
-  private def optionFor(arg: String): Option = {
+  private def optionFor(arg: String): Opt = {
     for (i <- 0 to options.length - 1) {
       if (options(i).is(arg)) {
         return options(i)
