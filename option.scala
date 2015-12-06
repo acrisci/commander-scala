@@ -1,10 +1,9 @@
-class Option(var flags: String, var description: String, var fn: String => Any = identity) {
+class Option(var flags: String, var description: String, var default: Any = null, var fn: String => Any = identity) {
   var required: Boolean = flags.contains("<")
   var optional: Boolean = flags.contains("[")
   var flagsList = splitFlags(flags)
   var short = ""
   var long = ""
-  var defaultValue: Any = true
 
   if (flagsList.length > 1 && !flagsList(1).matches("""^[\[<].*""")) {
     short = flagsList(0)

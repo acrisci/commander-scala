@@ -28,7 +28,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
   */
 
  def option(flags: String, description: String, default: Any = null, fn: String => Any = identity): Program = {
-    var opt = new Option(flags, description, fn=fn)
+    var opt = new Option(flags, description, default=default, fn=fn)
 
     // register the option
     options = opt :: options
@@ -37,7 +37,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
       // default to false instead of null for options without parameters
       optionValueMap = optionValueMap + (camelcase(opt.name) -> false)
     } else {
-      optionValueMap = optionValueMap + (camelcase(opt.name) -> default)
+      optionValueMap = optionValueMap + (camelcase(opt.name) -> opt.default)
     }
 
     this
@@ -56,7 +56,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
 
       if (opt != null) {
         if (!opt.takesParam) {
-          optionValueMap = optionValueMap + (camelcase(opt.name) -> opt.defaultValue)
+          optionValueMap = optionValueMap + (camelcase(opt.name) -> (if (opt.default == null) true else false))
         }
       } else if (lastOpt != null) {
         if (lastOpt.takesParam) {
