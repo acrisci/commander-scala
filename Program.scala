@@ -23,7 +23,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     }
 
     if (opt == null) {
-      sys.error("option '%s' not found".format(name))
+      sys.error(s"option '$name' not found")
     }
 
     opt.value
@@ -51,7 +51,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
 
       if (opt == null && arg.startsWith("-")) {
         // an unknown option was given
-        exitWithError("unknown option: %s".format(arg))
+        exitWithError(s"unknown option: $arg")
       }
 
       if (opt != null) {
@@ -68,7 +68,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
             lastOpt.value = lastOpt.fn(arg)
           } catch {
             case e: Exception => {
-              exitWithError("Could not parse option: %s".format(lastOpt.name), e)
+              exitWithError(s"Could not parse option: ${lastOpt.name}", e)
             }
           }
         } else {
@@ -194,11 +194,11 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     options.foreach((o) => {
       if (o.present && o.paramRequired && !o.givenParam) {
         // it was not given a required param
-        val message = "argument missing for %s".format(o.name)
+        val message = s"argument missing for ${o.name}"
         exitWithError(message)
       } else if (!o.present && o.required) {
         // option is required and not given
-        val message = "option missing: %s".format(o.name)
+        val message = s"option missing: ${o.name}"
         exitWithError(message)
       }
     })

@@ -7,7 +7,7 @@ private class Opt(var flags: String, var description: String, var default: Any =
   var givenParam = false
   var present = false
 
-  if (flagsList.length > 1 && !flagsList(1).matches("""^[\[<].*""")) {
+  if (flagsList.length > 1 && !flagsList(1).matches(raw"^[\[<].*")) {
     short = flagsList(0)
     long = flagsList(1)
   } else {
