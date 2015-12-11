@@ -233,7 +233,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
   /**
    * Get a help string for this program.
    */
-  def helpString(): String = {
+  def helpInformation(): String = {
     // XXX is this how you get the file name?
     var programName = new Exception().getStackTrace()(1).getFileName
     if (programName.endsWith(".scala")) {
@@ -282,7 +282,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
    * Print help information and exit
    */
   def help() = {
-    print(helpString)
+    print(helpInformation)
     // XXX throws sbt.TrapExitSecurityException on `sbt run`
     sys.exit(0)
   }

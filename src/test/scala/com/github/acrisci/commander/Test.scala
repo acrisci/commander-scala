@@ -98,7 +98,7 @@ object Test {
     -p, --peppers  Add peppers
 """
 
-      assertResult(helpString, "program should have a useful help string") { program.helpString }
+      assertResult(helpString, "program should have a useful help string") { program.helpInformation }
 
   }
 
