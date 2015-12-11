@@ -87,10 +87,13 @@ object Test {
   def testHelpString = {
     var program = new Program()
       .version("1.0.0")
+      .description("A test program")
       .option("-p, --peppers", "Add peppers")
 
       var helpString = """
   Usage: Test [options]
+
+  A test program
 
   Options:
 

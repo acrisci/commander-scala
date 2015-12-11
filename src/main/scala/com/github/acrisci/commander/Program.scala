@@ -62,6 +62,16 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
   }
 
   /**
+   * Set a description for this program
+   *
+   * @param d the description of this program
+   */
+  def description(d: String): Program= {
+    description = d
+    this
+  }
+
+  /**
    * Options will be set dynamically on this class in camelcase form. Do not
    * use this method directly.
    *
