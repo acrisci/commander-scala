@@ -98,6 +98,7 @@ object Test {
   Options:
 
     -h, --help     output usage information
+    -V, --version  output the version number
     -p, --peppers  Add peppers
 """
 

@@ -150,7 +150,9 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     var normalizedArgs = normalize(argv)
     var lastOpt: Opt = null
 
+    // TODO test me
     outputHelpIfNecessary(normalizedArgs)
+    outputVersionIfNecessary(normalizedArgs)
 
     for (i <- 0 to normalizedArgs.length - 1) {
       var arg = normalizedArgs(i)
@@ -270,11 +272,14 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
       help.append("\n  Options:\n\n")
       var width = options.map(_.flags.length).max
 
-      // add help option
+      // add help and version option
       help
         .append("    ")
         .append("-h, --help".padTo(width, " ").mkString)
         .append("  output usage information\n")
+        .append("    ")
+        .append("-V, --version".padTo(width, " ").mkString)
+        .append("  output the version number\n")
 
         options.foreach((option) => {
           help
@@ -297,9 +302,23 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     sys.exit(0)
   }
 
+  /**
+   * Print version information and exit
+   */
+  private def outputVersion() = {
+    println(version)
+    sys.exit(0)
+  }
+
   private def outputHelpIfNecessary(args: Array[String]) = {
     if (args.contains("--help") || args.contains("-h")) {
       help
+    }
+  }
+
+  private def outputVersionIfNecessary(args: Array[String]) = {
+    if (args.contains("--version") || args.contains("-V")) {
+      outputVersion
     }
   }
 
