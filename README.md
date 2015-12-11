@@ -38,7 +38,7 @@ Here are some things that need to be done.
 
 * Git-style commands
 * Publish to Maven
-* Scala docs and examples
+* Examples
 
 ## License
 
