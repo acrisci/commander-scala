@@ -1,3 +1,5 @@
+package com.github.acrisci.commander
+
 import org.scalatest.Assertions._
 
 object Test {

@@ -1,3 +1,5 @@
+package com.github.acrisci.commander
+
 import scala.language.dynamics
 
 class Program(exitOnError: Boolean = true) extends Dynamic {
