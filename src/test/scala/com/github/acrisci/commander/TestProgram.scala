@@ -29,26 +29,26 @@ class TestProgram extends FlatSpec with Matchers{
 
     withClue("accessing a program option value that does not exist should error") {
       intercept[RuntimeException] {
-        var program = testProgram.parse(Array())
-        var notAnOptionValue = program.notAnOptionValue
+        val program = testProgram.parse(Array())
+        val notAnOptionValue = program.notAnOptionValue
       }
     }
 
     withClue("giving argument with missing required param should error") {
       intercept[ProgramParseException] {
-        var program = testProgram.parse(Array("-t"))
+        val program = testProgram.parse(Array("-t"))
       }
     }
 
     withClue("an unknown option should throw an error") {
       intercept[ProgramParseException] {
-        var program = testProgram.parse(Array("--uknown-option"))
+        val program = testProgram.parse(Array("--uknown-option"))
       }
     }
 
     withClue("a missing required option should throw an error") {
       intercept[ProgramParseException] {
-        var program = new Program(exitOnError=false)
+        val program = new Program(exitOnError=false)
           .option("-r, --required-option", "A required option", required=true)
           .parse(Array())
       }
@@ -56,8 +56,8 @@ class TestProgram extends FlatSpec with Matchers{
   }
 
   "Program" should "parse arguments correctly" in {
-    var fakeArgs = Array("-po", "unknown1", "--bbq-sauce=sweet", "--cheese", "cheddar", "-l", "black", "unknown2", "unknown3", "-n", "10")
-    var program = testProgram.parse(fakeArgs)
+    val fakeArgs = Array("-po", "unknown1", "--bbq-sauce=sweet", "--cheese", "cheddar", "-l", "black", "unknown2", "unknown3", "-n", "10")
+    val program = testProgram.parse(fakeArgs)
 
     assertResult("1.0.0", "version should be set") { program.version }
 
@@ -85,12 +85,12 @@ class TestProgram extends FlatSpec with Matchers{
   }
 
   "Program" should "properly create the help string" in {
-    var program = new Program()
+    val program = new Program()
       .version("1.0.0")
       .description("A test program")
       .option("-p, --peppers", "Add peppers")
 
-    var helpString = """
+    val helpString = """
 Usage: TestProgram [options]
 
   A test program
