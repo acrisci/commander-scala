@@ -1,8 +1,8 @@
 package com.github.acrisci.commander
 
-import org.scalatest.Assertions._
+import org.scalatest.{Matchers, FlatSpec}
 
-object Test {
+class TestProgram extends FlatSpec with Matchers{
   def testProgram: Program = {
     new Program(exitOnError=false)
       .version("1.0.0")
@@ -18,7 +18,7 @@ object Test {
       .option("-n, --num [num]", "Number of pizzas", default=1, fn=(_.toInt))
   }
 
-  def testErrors = {
+  "Program" should "throw errors" in {
     withClue("coercion to int should throw an exception when invalid number is given") {
       intercept[NumberFormatException] {
         // default program behavior should exit instead of throw the exception.
@@ -55,7 +55,7 @@ object Test {
     }
   }
 
-  def testParse() = {
+  "Program" should "parse arguments correctly" in {
     var fakeArgs = Array("-po", "unknown1", "--bbq-sauce=sweet", "--cheese", "cheddar", "-l", "black", "unknown2", "unknown3", "-n", "10")
     var program = testProgram.parse(fakeArgs)
 
@@ -84,14 +84,14 @@ object Test {
                       "args should contain the unknown args") { program.args }
   }
 
-  def testHelpString = {
+  "Program" should "properly create the help string" in {
     var program = new Program()
       .version("1.0.0")
       .description("A test program")
       .option("-p, --peppers", "Add peppers")
 
-      var helpString = """
-  Usage: Test [options]
+    var helpString = """
+Usage: TestProgram [options]
 
   A test program
 
@@ -99,16 +99,8 @@ object Test {
 
     -h, --help     output usage information
     -V, --version  output the version number
-    -p, --peppers  Add peppers
-"""
+    -p, --peppers  Add peppers"""
 
-      assertResult(helpString, "program should have a useful help string") { program.helpInformation }
-
-  }
-
-  def main(args: Array[String]) { 
-    testParse
-    testHelpString
-    testErrors
+    assertResult(helpString.trim, "program should have a useful help string") { program.helpInformation.trim }
   }
 }
