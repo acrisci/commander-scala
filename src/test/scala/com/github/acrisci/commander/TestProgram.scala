@@ -81,7 +81,7 @@ class TestProgram extends FlatSpec with Matchers{
     assertResult(10, "num should be parsed as an int") { program.num }
 
     assertResult(List("unknown1", "unknown2", "unknown3"),
-                      "args should contain the unknown args") { program.args }
+      "args should contain the unknown args") { program.args }
   }
 
   "Program" should "properly create the help string" in {

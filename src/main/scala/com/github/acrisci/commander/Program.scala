@@ -3,49 +3,49 @@ package com.github.acrisci.commander
 import scala.language.dynamics
 
 /**
- * The program is a class used to parse command line arguments. Add options to
- * this class with `Program::option()`. Parse arguments you get from the
- * `main()` method with `Program::parse()`. The values of the options will be
- * dynamically set on this object in camelcase form.
- * Example:
- *
- * <pre>
- * object App {
- *   def main(args: Array[String]) {
- *     var program = new Program()
- *       .version("0.0.1")
- *       .option("-p, --peppers", "Add peppers")
- *       .option("-P, --pineapple", "Add pineapple")
- *       .option("-b, --bbq-sauce", "Add bbq sauce")
- *       .option("-c, --cheese [type]", "Add the specified type of cheese [marble]", default="marble")
- *       .parse(args)
- *
- *     println("you ordered a pizza with:")
- *     if (program.peppers) println("  - peppers")
- *     if (program.pineapple) println("  - pineapple")
- *     if (program.bbqSauce) println("  - bbq")
- *     println("  - " + program.cheese + " cheese")
- *   }
- * }
- * </pre>
- *
- * @param exitOnError whether to exit on parse errors or throw a ProgramParseException
- */
+  * The program is a class used to parse command line arguments. Add options to
+  * this class with `Program::option()`. Parse arguments you get from the
+  * `main()` method with `Program::parse()`. The values of the options will be
+  * dynamically set on this object in camelcase form.
+  * Example:
+  *
+  * <pre>
+  * object App {
+  *   def main(args: Array[String]) {
+  *     var program = new Program()
+  *       .version("0.0.1")
+  *       .option("-p, --peppers", "Add peppers")
+  *       .option("-P, --pineapple", "Add pineapple")
+  *       .option("-b, --bbq-sauce", "Add bbq sauce")
+  *       .option("-c, --cheese [type]", "Add the specified type of cheese [marble]", default="marble")
+  *       .parse(args)
+  *
+  *     println("you ordered a pizza with:")
+  *     if (program.peppers) println("  - peppers")
+  *     if (program.pineapple) println("  - pineapple")
+  *     if (program.bbqSauce) println("  - bbq")
+  *     println("  - " + program.cheese + " cheese")
+  *   }
+  * }
+  * </pre>
+  *
+  * @param exitOnError whether to exit on parse errors or throw a ProgramParseException
+  */
 class Program(exitOnError: Boolean = true) extends Dynamic {
   /**
-   * Unknown arguments not given to an option will be stored here.
-   */
+    * Unknown arguments not given to an option will be stored here.
+    */
   var args: List[String] = Nil
 
   /**
-   * The version of this program. This will be printed when `-v` or `--version`
-   * is given on the command line (TODO).
-   */
+    * The version of this program. This will be printed when `-v` or `--version`
+    * is given on the command line (TODO).
+    */
   var version: String = ""
 
   /**
-   * A useful description to be printed in the help string of this program.
-   */
+    * A useful description to be printed in the help string of this program.
+    */
   var description = ""
 
   /**
@@ -57,20 +57,20 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
   private var argv = new Array[String](0)
 
   /**
-   * Set the version of this program.
-   *
-   * @param v the version of this program
-   */
+    * Set the version of this program.
+    *
+    * @param v the version of this program
+    */
   def version(v: String): Program = {
     version = v
     this
   }
 
   /**
-   * Set a description for this program
-   *
-   * @param d the description of this program
-   */
+    * Set a description for this program
+    *
+    * @param d the description of this program
+    */
   def description(d: String): Program= {
     description = d
     this
@@ -87,11 +87,11 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
   }
 
   /**
-   * Options will be set dynamically on this class in camelcase form. Do not
-   * use this method directly.
-   *
-   * @param name the name of the option to get a value for
-   */
+    * Options will be set dynamically on this class in camelcase form. Do not
+    * use this method directly.
+    *
+    * @param name the name of the option to get a value for
+    */
   def selectDynamic(name: String) = {
     // find the option
     var opt: Opt = null
@@ -110,42 +110,42 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
   }
 
   /**
-   * Define option with `flags`, `description` and optional
-   * coercion `fn`.
-   *
-   * The `flags` string should contain both the short and long flags,
-   * separated by comma, a pipe or space. The following are all valid
-   * all will output this way when `--help` is used.
-   *
-   * <pre>
-   * "-p, --pepper"
-   * "-p|--pepper"
-   * "-p --pepper"
-   * </pre>
-   *
-   * Examples:
-   *
-   * <pre>
-   * // simple boolean defaulting to false
-   * program.option("-p, --pepper", "add pepper")
-   * // option with optional parameter defaulting to "marble"
-   * program.option("-c, --cheese [type]", "add cheese", default="marble")
-   * // option with required parameter
-   * program.option("-b, --bbq-sauce <type>", "add bbq sauce")
-   * // option that is coerced to an integer
-   * program.option("-n, --num [num]", "number of pizzas", default=1, fn=(_.toInt))
-   * // option that is required for the program to run
-   * program.option("-C, --crust <type>", required=true)
-   * </pre>
-   *
-   * @param flags        The flags for this option (see example)
-   * @param description  Description of this option for the help string
-   * @param default      The default value when this option is not given
-   * @param required     Whether this option is required for the program to run
-   * @param fn           Coercion function that takes the string value given on
-   *                     the command line and returns the value that will be
-   *                     given on the program object
-   */
+    * Define option with `flags`, `description` and optional
+    * coercion `fn`.
+    *
+    * The `flags` string should contain both the short and long flags,
+    * separated by comma, a pipe or space. The following are all valid
+    * all will output this way when `--help` is used.
+    *
+    * <pre>
+    * "-p, --pepper"
+    * "-p|--pepper"
+    * "-p --pepper"
+    * </pre>
+    *
+    * Examples:
+    *
+    * <pre>
+    * // simple boolean defaulting to false
+    * program.option("-p, --pepper", "add pepper")
+    * // option with optional parameter defaulting to "marble"
+    * program.option("-c, --cheese [type]", "add cheese", default="marble")
+    * // option with required parameter
+    * program.option("-b, --bbq-sauce <type>", "add bbq sauce")
+    * // option that is coerced to an integer
+    * program.option("-n, --num [num]", "number of pizzas", default=1, fn=(_.toInt))
+    * // option that is required for the program to run
+    * program.option("-C, --crust <type>", required=true)
+    * </pre>
+    *
+    * @param flags        The flags for this option (see example)
+    * @param description  Description of this option for the help string
+    * @param default      The default value when this option is not given
+    * @param required     Whether this option is required for the program to run
+    * @param fn           Coercion function that takes the string value given on
+    *                     the command line and returns the value that will be
+    *                     given on the program object
+    */
   def option(flags: String, description: String, default: Any = null, required: Boolean = false, fn: String => Any = identity): Program = {
     var opt = new Opt(flags, description, default=default, required=required, fn=fn)
 
@@ -156,10 +156,10 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
   }
 
   /**
-   * Parse command line args
-   *
-   * @param argv  Args given to the `main()` method.
-   */
+    * Parse command line args
+    *
+    * @param argv  Args given to the `main()` method.
+    */
   def parse(argv: Array[String]): Program = {
     this.argv = argv
     var normalizedArgs = normalize(argv)
@@ -185,24 +185,24 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
           // XXX I'm not sure how default values should work for booleans yet
           opt.value = (if (opt.default == null) true else opt.default)
         }
-        } else if (lastOpt != null) {
-          if (lastOpt.takesParam) {
-            try {
-              lastOpt.givenParam = true
-              lastOpt.value = lastOpt.fn(arg)
-            } catch {
-              case e: Exception => {
-                exitWithError(s"Could not parse option: ${lastOpt.name}", e)
-              }
+      } else if (lastOpt != null) {
+        if (lastOpt.takesParam) {
+          try {
+            lastOpt.givenParam = true
+            lastOpt.value = lastOpt.fn(arg)
+          } catch {
+            case e: Exception => {
+              exitWithError(s"Could not parse option: ${lastOpt.name}", e)
             }
-            } else {
-              args = args :+ arg
-            }
-            } else {
-              args = args :+ arg
-            }
+          }
+        } else {
+          args = args :+ arg
+        }
+      } else {
+        args = args :+ arg
+      }
 
-            lastOpt = opt
+      lastOpt = opt
     }
 
     validateOptions
@@ -258,8 +258,8 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
   }
 
   /**
-   * Get a help string for this program.
-   */
+    * Get a help string for this program.
+    */
   def helpInformation(): String = {
     // XXX is this how you get the file name?
     var programName = new Exception().getStackTrace()(1).getFileName
@@ -275,49 +275,49 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
       .append(programName)
       .append(" [options]\n")
 
-      // description
-      if (description != "") {
-        help
-          .append("\n  ")
-          .append(description)
-          .append("\n")
-      }
+    // description
+    if (description != "") {
+      help
+        .append("\n  ")
+        .append(description)
+        .append("\n")
+    }
 
-      // options
-      help.append("\n  Options:\n\n")
-      var width = options.map(_.flags.length).max
+    // options
+    help.append("\n  Options:\n\n")
+    var width = options.map(_.flags.length).max
 
-      // add help and version option
+    // add help and version option
+    help
+      .append("    ")
+      .append("-h, --help".padTo(width, " ").mkString)
+      .append("  output usage information\n")
+      .append("    ")
+      .append("-V, --version".padTo(width, " ").mkString)
+      .append("  output the version number\n")
+
+    options.foreach((option) => {
       help
         .append("    ")
-        .append("-h, --help".padTo(width, " ").mkString)
-        .append("  output usage information\n")
-        .append("    ")
-        .append("-V, --version".padTo(width, " ").mkString)
-        .append("  output the version number\n")
+        .append(option.flags.padTo(width, " ").mkString)
+        .append("  ")
+        .append(option.description)
+        .append("\n")
+    })
 
-        options.foreach((option) => {
-          help
-            .append("    ")
-            .append(option.flags.padTo(width, " ").mkString)
-            .append("  ")
-            .append(option.description)
-            .append("\n")
-        })
-
-      // epilogue
-      if (epilogue != "") {
-        help.append("\n  ")
-        help.append(epilogue)
-        help.append("\n")
-      }
+    // epilogue
+    if (epilogue != "") {
+      help.append("\n  ")
+      help.append(epilogue)
+      help.append("\n")
+    }
 
     help.result
   }
 
   /**
-   * Print help information and exit
-   */
+    * Print help information and exit
+    */
   def help() = {
     print(helpInformation)
     // XXX throws sbt.TrapExitSecurityException on `sbt run`
@@ -325,8 +325,8 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
   }
 
   /**
-   * Print version information and exit
-   */
+    * Print version information and exit
+    */
   private def outputVersion() = {
     println(version)
     sys.exit(0)
