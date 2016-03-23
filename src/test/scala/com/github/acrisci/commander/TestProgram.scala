@@ -15,7 +15,7 @@ class TestProgram extends FlatSpec with Matchers{
       .option("-L, --lettuce [type]", "Add lettuce", default="iceberg")
       .option("-P, --pickles [type]", "Add pickles")
       .option("-t, --tomatoes <type>", "Add tomatoes")
-      .option("-n, --num [num]", "Number of pizzas", default=1, fn=(_.toInt))
+      .option("-n, --num [num]", "Number of pizzas", default=1, fn=_.toInt)
   }
 
   "Program" should "throw errors" in {
@@ -30,25 +30,25 @@ class TestProgram extends FlatSpec with Matchers{
     withClue("accessing a program option value that does not exist should error") {
       intercept[RuntimeException] {
         val program = testProgram.parse(Array())
-        val notAnOptionValue = program.notAnOptionValue
+        program.notAnOptionValue
       }
     }
 
     withClue("giving argument with missing required param should error") {
       intercept[ProgramParseException] {
-        val program = testProgram.parse(Array("-t"))
+        testProgram.parse(Array("-t"))
       }
     }
 
     withClue("an unknown option should throw an error") {
       intercept[ProgramParseException] {
-        val program = testProgram.parse(Array("--uknown-option"))
+        testProgram.parse(Array("--uknown-option"))
       }
     }
 
     withClue("a missing required option should throw an error") {
       intercept[ProgramParseException] {
-        val program = new Program(exitOnError=false)
+        new Program(exitOnError=false)
           .option("-r, --required-option", "A required option", required=true)
           .parse(Array())
       }
@@ -104,6 +104,6 @@ Usage: TestProgram [options]
 
   This is the epilogue"""
 
-    assertResult(helpString.trim, "program should have a useful help string") { program.helpInformation.trim }
+    assertResult(helpString.trim, "program should have a useful help string") { program.helpInformation().trim }
   }
 }

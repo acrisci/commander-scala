@@ -96,8 +96,8 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     // find the option
     var opt: Opt = null
 
-    for (i <- 0 to options.length - 1) {
-      if (camelcase(options(i).name) == name) {
+    for (i <- options.indices) {
+      if (camelcase(options(i).name()) == name) {
         opt = options(i)
       }
     }
@@ -147,7 +147,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     *                     given on the program object
     */
   def option(flags: String, description: String, default: Any = null, required: Boolean = false, fn: String => Any = identity): Program = {
-    var opt = new Opt(flags, description, default=default, required=required, fn=fn)
+    val opt = new Opt(flags, description, default=default, required=required, fn=fn)
 
     // register the option
     options = opt :: options
@@ -162,16 +162,16 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     */
   def parse(argv: Array[String]): Program = {
     this.argv = argv
-    var normalizedArgs = normalize(argv)
+    val normalizedArgs = normalize(argv)
     var lastOpt: Opt = null
 
     // TODO test me
     outputHelpIfNecessary(normalizedArgs)
     outputVersionIfNecessary(normalizedArgs)
 
-    for (i <- 0 to normalizedArgs.length - 1) {
-      var arg = normalizedArgs(i)
-      var opt = optionFor(arg)
+    for (i <- normalizedArgs.indices) {
+      val arg = normalizedArgs(i)
+      val opt = optionFor(arg)
 
       if (opt == null && arg.startsWith("-")) {
         // an unknown option was given
@@ -183,17 +183,16 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
 
         if (!opt.takesParam) {
           // XXX I'm not sure how default values should work for booleans yet
-          opt.value = (if (opt.default == null) true else opt.default)
+          opt.value = if (opt.default == null) true else opt.default
         }
       } else if (lastOpt != null) {
-        if (lastOpt.takesParam) {
+        if (lastOpt.takesParam()) {
           try {
             lastOpt.givenParam = true
             lastOpt.value = lastOpt.fn(arg)
           } catch {
-            case e: Exception => {
-              exitWithError(s"Could not parse option: ${lastOpt.name}", e)
-            }
+            case e: Exception =>
+              exitWithError(s"Could not parse option: ${lastOpt.name()}", e)
           }
         } else {
           args = args :+ arg
@@ -205,15 +204,15 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
       lastOpt = opt
     }
 
-    validateOptions
+    validateOptions()
 
     this
   }
 
   private def normalize(args: Array[String]): Array[String] = {
     var ret :Array[String] = new Array[String](0)
-    for (i <- 0 to args.length - 1) {
-      var arg = args(i)
+    for (i <- args.indices) {
+      val arg = args(i)
       var lastOpt: Opt = null
 
       if (i > 0) {
@@ -227,7 +226,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
       } else if (arg.length > 1 && arg.startsWith("-") && '-' != arg(1)) {
         arg.tail.foreach((c) => ret = ret :+ "-" + c)
       } else if (arg.startsWith("--") && arg.contains("=")) {
-        var index = arg.indexOf("=")
+        val index = arg.indexOf("=")
         ret = ret :+ arg.slice(0, index)
         ret = ret :+ arg.slice(index + 1, arg.length)
       } else {
@@ -236,17 +235,17 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
 
     }
 
-    return ret
+    ret
   }
 
   private def optionFor(arg: String): Opt = {
-    for (i <- 0 to options.length - 1) {
+    for (i <- options.indices) {
       if (options(i).is(arg)) {
         return options(i)
       }
     }
 
-    return null
+    null
   }
 
   private def camelcase(flag: String): String = {
@@ -267,7 +266,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
       programName = programName.take(programName.lastIndexOf("."))
     }
 
-    var help = new StringBuilder()
+    val help = new StringBuilder()
 
     // usage information
     help
@@ -285,7 +284,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
 
     // options
     help.append("\n  Options:\n\n")
-    var width = options.map(_.flags.length).max
+    val width = options.map(_.flags.length).max
 
     // add help and version option
     help
@@ -319,7 +318,7 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     * Print help information and exit
     */
   def help() = {
-    print(helpInformation)
+    print(helpInformation())
     // XXX throws sbt.TrapExitSecurityException on `sbt run`
     sys.exit(0)
   }
@@ -334,25 +333,25 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
 
   private def outputHelpIfNecessary(args: Array[String]) = {
     if (args.contains("--help") || args.contains("-h")) {
-      help
+      help()
     }
   }
 
   private def outputVersionIfNecessary(args: Array[String]) = {
     if (args.contains("--version") || args.contains("-V")) {
-      outputVersion
+      outputVersion()
     }
   }
 
-  private def validateOptions = {
+  private def validateOptions() = {
     options.foreach((o) => {
       if (o.present && o.paramRequired && !o.givenParam) {
         // it was not given a required param
-        val message = s"argument missing for ${o.name}"
+        val message = s"argument missing for ${o.name()}"
         exitWithError(message)
       } else if (!o.present && o.required) {
         // option is required and not given
-        val message = s"option missing: ${o.name}"
+        val message = s"option missing: ${o.name()}"
         exitWithError(message)
       }
     })
