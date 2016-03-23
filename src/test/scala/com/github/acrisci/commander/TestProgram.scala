@@ -88,6 +88,7 @@ class TestProgram extends FlatSpec with Matchers{
     val program = new Program()
       .version("1.0.0")
       .description("A test program")
+      .epilogue("This is the epilogue")
       .option("-p, --peppers", "Add peppers")
 
     val helpString = """
@@ -99,7 +100,9 @@ Usage: TestProgram [options]
 
     -h, --help     output usage information
     -V, --version  output the version number
-    -p, --peppers  Add peppers"""
+    -p, --peppers  Add peppers
+
+  This is the epilogue"""
 
     assertResult(helpString.trim, "program should have a useful help string") { program.helpInformation.trim }
   }

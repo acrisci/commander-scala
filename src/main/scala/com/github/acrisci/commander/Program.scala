@@ -48,6 +48,11 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
    */
   var description = ""
 
+  /**
+    * Additional information to be printed at the end of the help string in this program.
+    */
+  var epilogue = ""
+
   private var options: List[Opt] = Nil
   private var argv = new Array[String](0)
 
@@ -68,6 +73,16 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
    */
   def description(d: String): Program= {
     description = d
+    this
+  }
+
+  /**
+    * Set an epilogue message for this program
+    *
+    * @param e the epilogue message
+    */
+  def epilogue(e: String): Program = {
+    epilogue = e
     this
   }
 
@@ -290,7 +305,14 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
             .append("\n")
         })
 
-        help.result
+      // epilogue
+      if (epilogue != "") {
+        help.append("\n  ")
+        help.append(epilogue)
+        help.append("\n")
+      }
+
+    help.result
   }
 
   /**
