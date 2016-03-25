@@ -8,6 +8,8 @@ lazy val root = (project in file(".")).
     scalaVersion := "2.11.7"
   )
 
+testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oF")
+
 publishTo := {
   val nexus = "https://oss.sonatype.org/"
   if (isSnapshot.value)
