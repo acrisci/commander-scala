@@ -17,7 +17,7 @@ private class Command(val klass: Class[_], var usage: String, val description: S
   if (name == "") {
     // if usage did not start with a name, use hyphen-case
     name = toHyphenCase(klass.getName.split("\\.").last)
-    usage = s"${name} ${usage}"
+    usage = s"$name $usage"
   }
 
   def runMain(args: Array[String]) = {
@@ -25,7 +25,7 @@ private class Command(val klass: Class[_], var usage: String, val description: S
     def nop(any: Any) = {}
 
     // TODO: handle NoSuchMethodError nicely
-    nop(klass.getMethods().filter(_.getName == "main").head.invoke(klass.newInstance(), args))
+    nop(klass.getMethods.filter(_.getName == "main").head.invoke(klass.newInstance(), args))
   }
 
   private def toHyphenCase(name: String) = {
