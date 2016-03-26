@@ -1,7 +1,7 @@
 package com.github.acrisci.commander
 
 import better.files._
-import com.github.acrisci.commander.commands.{CommandWithInvalidMain, CommandThatHasNoMain, CommandThatDoesNothing, CommandThatWritesAFile}
+import com.github.acrisci.commander.commands._
 import com.github.acrisci.commander.errors.{InvalidCommandException, ProgramParseException}
 import org.scalatest.{Matchers, FlatSpec}
 
@@ -173,6 +173,7 @@ Usage: TestProgram [options]
 
     command-that-writes-a-file [path]  it creates a file when it runs
     do-nothing                         it does nothing at all
+    help [cmd]                         Display help for [cmd]
 
   Options:
 
@@ -198,6 +199,7 @@ Usage: TestProgram [options]
 
     write [path]  it has the name overridden
     do-nothing    it does nothing at all
+    help [cmd]    Display help for [cmd]
 
   Options:
 
@@ -207,5 +209,18 @@ Usage: TestProgram [options]
 
     assertResult(helpString.trim, "the program should format help string info correctly for commands") { program.helpInformation().trim }
     reset
+  }
+
+  "Commands" should "have implicit help" in {
+    def file = new CommandThatWritesOnHelp().file
+    def reset() = file.delete(swallowIOExceptions=true)
+    reset()
+
+    new Program(exitOnCommand=false)
+      .command(classOf[CommandThatWritesOnHelp], "command-with-help")
+      .parse(Array("help", "command-with-help"))
+
+    assert(file.exists())
+    reset()
   }
 }

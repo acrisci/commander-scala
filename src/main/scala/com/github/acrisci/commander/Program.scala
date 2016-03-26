@@ -221,10 +221,34 @@ class Program(exitOnError: Boolean = true, exitOnCommand: Boolean = true) extend
     var lastOpt: Opt = null
 
     // check if we have to run commands
-    if (commands.nonEmpty) {
+    if (commands.nonEmpty && normalizedArgs.length > 0) {
       val firstArg = normalizedArgs.head
+
+      // TODO: handle no help
+      if (firstArg == "help") {
+        // show help info for the given command
+        if (normalizedArgs.length == 1) {
+          // show help for this program
+          help()
+          this
+        } else {
+          val cmdName = normalizedArgs(1)
+          if (!commands.exists(_.name == cmdName)) {
+            exitWithError(s"No such command: $cmdName")
+            this
+          }
+
+          val command = commands.find(_.name == cmdName).get
+          command.runMain(Array("--help"))
+          if (exitOnCommand) {
+            System.exit(0)
+          } else {
+            this
+          }
+        }
+      }
+
       for (command <- commands) {
-        // TODO: validate commands?
         if (command.name == firstArg) {
           // run this command if possible
           command.runMain(argv.tail)
@@ -371,6 +395,14 @@ class Program(exitOnError: Boolean = true, exitOnCommand: Boolean = true) extend
           .append(command.description)
           .append("\n")
       }
+
+      // TODO: handle no help
+      // implicit help command
+      help
+        .append("    ")
+        .append("help [cmd]".padTo(cmdWidth, " ").mkString)
+        .append("  Display help for [cmd]")
+        .append("\n")
     }
 
     // options
