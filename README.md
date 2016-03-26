@@ -20,10 +20,10 @@ var program = new Program()
   if (args.isEmpty)
     program.help
 
-  val peppers = program.peppers.asInstanceOf[Boolean]
-  val pineapple = program.pineapple.asInstanceOf[Boolean]
-  val bbqSauce = program.bbqSauce.asInstanceOf[Boolean]
-  val cheese = program.cheese.asInstanceOf[String]
+  val peppers: Boolean = program.peppers
+  val pineapple: Boolean = program.pineapple
+  val bbqSauce: Boolean = program.bbqSauce
+  val cheese: String = program.cheese
 
   println("you ordered a pizza with:")
   if (peppers)
