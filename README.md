@@ -51,10 +51,15 @@ Make issues on Github to report bugs or suggest new features. Let me know if you
 
 Here are some things that need to be done.
 
-* Publish to Maven
+* Publish to Maven (and release)
 * Examples
 * Rethink selectDynamic implementation
 * Set no help
+* Code cleanup
+* Test `--help` option and `help` command
+* Cleanup program constructor args (debug mode for tests?)
+* Promotion
+* Command name duplicates
 
 ## License
 
