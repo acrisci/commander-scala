@@ -51,9 +51,12 @@ Make issues on Github to report bugs or suggest new features. Let me know if you
 
 Here are some things that need to be done.
 
-* Git-style commands
 * Publish to Maven
 * Examples
+* Validate commands
+* Rethink selectDynamic implementation
+* Override usage
+* Set no version/help
 
 ## License
 
