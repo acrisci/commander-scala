@@ -11,16 +11,11 @@ var program = new Program()
 if (args.isEmpty)
   program.help
 
-val peppers = program.peppers.asInstanceOf[Boolean]
-val pineapple = program.pineapple.asInstanceOf[Boolean]
-val bbqSauce = program.bbqSauce.asInstanceOf[Boolean]
-val cheese = program.cheese.asInstanceOf[String]
-
 println("you ordered a pizza with:")
-if (peppers)
+if (program.peppers)
   println("  - peppers")
-if (pineapple)
+if (program.pineapple)
   println("  - pineapple")
-if (bbqSauce)
+if (program.bbqSauce)
   println("  - bbq")
-println("  - " + cheese + " cheese")
+println("  - " + program.cheese + " cheese")

@@ -3,6 +3,7 @@ package com.github.acrisci.commander
 import com.github.acrisci.commander.errors.ProgramParseException
 
 import scala.language.dynamics
+import scala.reflect.ClassTag
 
 /**
   * The program is a class used to parse command line arguments. Add options to
@@ -25,17 +26,12 @@ import scala.language.dynamics
   * if (args.isEmpty)
   *   program.help
   *
-  * val peppers: Boolean = program.peppers
-  * val pineapple: Boolean = program.pineapple
-  * val bbqSauce: Boolean = program.bbqSauce
-  * val cheese: String = program.cheese
-  *
   * println("you ordered a pizza with:")
-  * if (peppers)
+  * if (program.peppers)
   *   println("  - peppers")
-  * if (pineapple)
+  * if (program.pineapple)
   *   println("  - pineapple")
-  * if (bbqSauce)
+  * if (program.bbqSauce)
   *   println("  - bbq")
   * println("  - " + cheese + " cheese")
   * </pre>
@@ -121,7 +117,7 @@ class Program(exitOnError: Boolean = true, exitOnCommand: Boolean = true) extend
     *
     * @param name the name of the option to get a value for
     */
-  def selectDynamic(name: String) = {
+  def selectDynamic[T:ClassTag](name: String): T = {
     // find the option
     var opt: Opt = null
 
@@ -135,7 +131,7 @@ class Program(exitOnError: Boolean = true, exitOnCommand: Boolean = true) extend
       sys.error(s"option '$name' not found")
     }
 
-    opt.value
+    opt.value.asInstanceOf[T]
   }
 
   /**

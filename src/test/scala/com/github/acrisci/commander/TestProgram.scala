@@ -103,6 +103,8 @@ class TestProgram extends FlatSpec with Matchers{
     assertResult("java.lang.Integer", "num was coerced to an int") { program.num.getClass.getName }
     assertResult(10, "num should be parsed as an int") { program.num }
 
+    assertResult(15, "TypeTags should work for easy casting") { program.num[Int] + 5 }
+
     assertResult(List("unknown1", "unknown2", "unknown3"),
       "args should contain the unknown args") { program.args }
   }

@@ -20,19 +20,14 @@ var program = new Program()
 if (args.isEmpty)
   program.help
 
-val peppers: Boolean = program.peppers
-val pineapple: Boolean = program.pineapple
-val bbqSauce: Boolean = program.bbqSauce
-val cheese: String = program.cheese
-
 println("you ordered a pizza with:")
-if (peppers)
+if (program.peppers)
   println("  - peppers")
-if (pineapple)
+if (program.pineapple)
   println("  - pineapple")
-if (bbqSauce)
+if (program.bbqSauce)
   println("  - bbq")
-println("  - " + cheese + " cheese")
+println("  - " + program.cheese + " cheese")
 ```
 
 ## Commands
@@ -61,7 +56,6 @@ Make issues on Github to report bugs or suggest new features. Let me know if you
 Here are some things that need to be done.
 
 * Publish to Maven (and release)
-* Rethink selectDynamic implementation
 * Set no help
 * Code cleanup
 * Test `--help` option and `help` command
