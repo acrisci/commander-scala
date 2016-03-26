@@ -31,8 +31,8 @@ import scala.language.dynamics
   * }
   * </pre>
   *
-  * @param exitOnError whether to exit on parse errors or throw a ProgramParseException
-  * @param exitOnCommand whether or not to exit after a command is run
+  * @param exitOnError deprecated - do not use
+  * @param exitOnCommand deprecated - do not use
   */
 class Program(exitOnError: Boolean = true, exitOnCommand: Boolean = true) extends Dynamic {
   /**
