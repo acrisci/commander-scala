@@ -86,7 +86,7 @@ class TestProgram extends FlatSpec with Matchers{
   }
 
   "Program" should "properly create the help string" in {
-    val program = new Program()
+    var program = new Program()
       .version("1.0.0")
       .description("A test program")
       .epilogue("This is the epilogue")
@@ -106,6 +106,16 @@ Usage: TestProgram [options]
   This is the epilogue"""
 
     assertResult(helpString.trim, "program should have a useful help string") { program.helpInformation().trim }
+
+    val usage = "java -jar my-program.jar [options]"
+
+    program = new Program()
+      .version("1.0.0")
+      .usage(usage)
+      .parse(Array())
+
+    assert(program.helpInformation().trim.startsWith(s"Usage: $usage"),
+      "the program should have the overridden usage string")
   }
 
   "Program" should "properly execute commands when given" in {

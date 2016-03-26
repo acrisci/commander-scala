@@ -54,6 +54,11 @@ class Program(exitOnError: Boolean = true, exitOnCommand: Boolean = true) extend
     */
   var epilogue = ""
 
+  /**
+    * Custom usage information to be printed in the help string
+    */
+  var usage = ""
+
   private var options: List[Opt] = Nil
   private var argv = new Array[String](0)
 
@@ -84,6 +89,16 @@ class Program(exitOnError: Boolean = true, exitOnCommand: Boolean = true) extend
     */
   def epilogue(e: String): Program = {
     epilogue = e
+    this
+  }
+
+  /**
+    * Set usage information for this program
+    *
+    * @param u the usage information
+    */
+  def usage(u: String): Program = {
+    usage = u
     this
   }
 
@@ -322,11 +337,15 @@ class Program(exitOnError: Boolean = true, exitOnCommand: Boolean = true) extend
     val help = new StringBuilder()
 
     // usage information
-    help
-      .append("\n  Usage: ")
-      .append(programName)
-      .append(" [options]")
-      .append(if (commands.nonEmpty) " [command]\n" else "\n")
+    if (usage == "") {
+      help
+        .append("\n  Usage: ")
+        .append(programName)
+        .append(" [options]")
+        .append(if (commands.nonEmpty) " [command]\n" else "\n")
+    } else {
+      help.append("\n Usage: ").append(usage).append("\n")
+    }
 
     // description
     if (description != "") {
