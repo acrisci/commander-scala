@@ -26,6 +26,21 @@ object App {
 }
 ```
 
+## Commands
+
+You can define commands on your program like this:
+
+```scala
+var program = new Program()
+  .version("0.0.1")
+  .command(classOf[InstallPackages], "install [packages]", "Install the given packages")
+  .command(classOf[SearchPackages], "search [query]", "Search for packages")
+  .command(classOf[ListPackages], "list", "List packages")
+  .parse(args)
+```
+
+If the name of the command is given as the first argument to the program, it will run the `main` method of the given class with the remaining arguments.
+
 ## Contributing
 
 `commander-scala` is a work in progress.

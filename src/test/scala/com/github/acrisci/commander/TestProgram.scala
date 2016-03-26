@@ -1,5 +1,6 @@
 package com.github.acrisci.commander
 
+import better.files._
 import org.scalatest.{Matchers, FlatSpec}
 
 class TestProgram extends FlatSpec with Matchers{
@@ -105,5 +106,69 @@ Usage: TestProgram [options]
   This is the epilogue"""
 
     assertResult(helpString.trim, "program should have a useful help string") { program.helpInformation().trim }
+  }
+
+  "Program" should "properly execute commands when given" in {
+    def file = "/"/"tmp"/"commander-scala-test"/"command-one-flag"
+
+    def reset = file.delete(swallowIOExceptions=true)
+
+    def programWithCommands = new Program(exitOnError=false, exitOnCommand=false)
+      .version("1.0.0")
+      .command(classOf[CommandThatDoesNothing], "do-nothing", "it does nothing at all")
+      .description("A program with commands.")
+
+    reset
+
+    var program = programWithCommands
+      .command(classOf[CommandThatWritesAFile], "[path]", "it creates a file when it runs")
+      .parse(Array("command-that-writes-a-file", file.pathAsString))
+
+    assert(file.exists(), "the command should run when the hyphen-case name of the class is given")
+    reset
+
+    var helpString = """
+  Usage: TestProgram [options] [command]
+
+  A program with commands.
+
+  Commands:
+
+    command-that-writes-a-file [path]  it creates a file when it runs
+    do-nothing                         it does nothing at all
+
+  Options:
+
+    -h, --help     output usage information
+    -V, --version  output the version number
+                        """
+
+    assertResult(helpString.trim, "the program should format help string info correctly for commands") { program.helpInformation().trim }
+
+    program = programWithCommands
+      .command(classOf[CommandThatWritesAFile], "write [path]", "it has the name overridden")
+      .parse(Array("write", file.pathAsString))
+
+    assert(file.exists(), "the command should run when the overridden name is given")
+    reset
+
+    helpString = """
+  Usage: TestProgram [options] [command]
+
+  A program with commands.
+
+  Commands:
+
+    write [path]  it has the name overridden
+    do-nothing    it does nothing at all
+
+  Options:
+
+    -h, --help     output usage information
+    -V, --version  output the version number
+                     """
+
+    assertResult(helpString.trim, "the program should format help string info correctly for commands") { program.helpInformation().trim }
+    reset
   }
 }

@@ -30,8 +30,9 @@ import scala.language.dynamics
   * </pre>
   *
   * @param exitOnError whether to exit on parse errors or throw a ProgramParseException
+  * @param exitOnCommand whether or not to exit after a command is run
   */
-class Program(exitOnError: Boolean = true) extends Dynamic {
+class Program(exitOnError: Boolean = true, exitOnCommand: Boolean = true) extends Dynamic {
   /**
     * Unknown arguments not given to an option will be stored here.
     */
@@ -155,6 +156,41 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     this
   }
 
+  private var commands: List[Command] = List()
+
+  /**
+    * Define a command that will run the given class with `usage` and
+    * `description`.
+    *
+    * The command will be defined as the hyphenated name of the class (e.g.,
+    * SomeClass -> some-class). You can choose your own name for the command by
+    * providing it as the first word (beginning with a word character) in the
+    * `usage` parameter.
+    *
+    * If the command name is given as the first argument on the command line,
+    * it will run a method with the signature <code>main(args: Array[String])</code>
+    * of the given class with the remaining arguments. That class should
+    * define another program in the main method to handle the remaining arguments.
+    *
+    * Examples:
+    *
+    * <pre>
+    *   // If ./program install-package is given on the command line, it will run InstallPackage.main() with the remaining args.
+    *   program.command(classOf[InstallPackage], "[package]", "Install the given package")
+    *   // Override the name of the command to `install`
+    *   program.command(classOf[InstallPackage], "install [package]", "Install the given package")
+    * </pre>
+    *
+    * @param klass The class that will handle this command. It should have a method with signature main(args: Array[String]) that will be called with remaining arguments.
+    * @param usage Usage that will be displayed in the help message. The first word will be the name of the command if it begins with a word character.
+    * @param description Description of this command to be displayed in the help string.
+    * @return Returns the program for chaining.
+    */
+  def command(klass: Class[_], usage: String = "", description: String = ""): Program = {
+    commands = new Command(klass, usage, description) :: commands
+    this
+  }
+
   /**
     * Parse command line args
     *
@@ -164,6 +200,23 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     this.argv = argv
     val normalizedArgs = normalize(argv)
     var lastOpt: Opt = null
+
+    // check if we have to run commands
+    if (commands.nonEmpty) {
+      val firstArg = normalizedArgs.head
+      for (command <- commands) {
+        // TODO: validate commands?
+        if (command.name == firstArg) {
+          // run this command if possible
+          command.runMain(argv.tail)
+          if (exitOnCommand) {
+            System.exit(0)
+          } else {
+            this
+          }
+        }
+      }
+    }
 
     // TODO test me
     outputHelpIfNecessary(normalizedArgs)
@@ -272,7 +325,8 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
     help
       .append("\n  Usage: ")
       .append(programName)
-      .append(" [options]\n")
+      .append(" [options]")
+      .append(if (commands.nonEmpty) " [command]\n" else "\n")
 
     // description
     if (description != "") {
@@ -282,9 +336,23 @@ class Program(exitOnError: Boolean = true) extends Dynamic {
         .append("\n")
     }
 
+    // commands
+    if (commands.nonEmpty) {
+      val cmdWidth = commands.map(_.usage.length).max
+      help.append("\n  Commands:\n\n")
+      for (command <- commands) {
+        help
+          .append("    ")
+          .append(command.usage.padTo(cmdWidth, " ").mkString)
+          .append("  ")
+          .append(command.description)
+          .append("\n")
+      }
+    }
+
     // options
     help.append("\n  Options:\n\n")
-    val width = options.map(_.flags.length).max
+    val width = if (options.nonEmpty) options.map(_.flags.length).max else "-V, --version".length
 
     // add help and version option
     help

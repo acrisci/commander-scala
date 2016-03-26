@@ -1,4 +1,5 @@
 libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4"
+libraryDependencies += "com.github.pathikrit" %% "better-files" % "2.15.0"
 
 lazy val root = (project in file(".")).
   settings(
