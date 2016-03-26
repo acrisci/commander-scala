@@ -18,7 +18,7 @@ if [ ! -d $jars_dir ]; then
     exit 1
 fi
 
-classpath=../target/scala-2.11/*.jar
+classpath=$jars_dir/*.jar
 classpath=`echo $classpath | tr " " ":"`
 
 scala -cp "$classpath" $scala_file "$@"

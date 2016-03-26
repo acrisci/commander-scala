@@ -7,23 +7,32 @@ A scalable command-line parser inspired by [commander.js](https://github.com/tj/
  Options with commander are defined with the `.option()` method, also serving as documentation for the options. The example below parses args and options from `args`, leaving remaining args as the `program.args` array which were not consumed by options. Options will be set on the `program` dynamically based on the camelcased form of the long opt.
 
 ```scala
-object App {
-  def main(args: Array[String]) { 
-    var program = new Program()
-      .version("0.0.1")
-      .option("-p, --peppers", "Add peppers")
-      .option("-P, --pineapple", "Add pineapple")
-      .option("-b, --bbq-sauce", "Add bbq sauce")
-      .option("-c, --cheese [type]", "Add the specified type of cheese [marble]", default="marble")
-      .parse(args)
+import com.github.acrisci.commander.Program
 
-    println("you ordered a pizza with:")
-    if (program.peppers) println("  - peppers")
-    if (program.pineapple) println("  - pineapple")
-    if (program.bbqSauce) println("  - bbq")
-    println("  - " + program.cheese + " cheese")
-  }
-}
+var program = new Program()
+  .version("0.0.1")
+  .option("-p, --peppers", "Add peppers")
+  .option("-P, --pineapple", "Add pineapple")
+  .option("-b, --bbq-sauce", "Add bbq sauce")
+  .option("-c, --cheese [type]", "Add the specified type of cheese [marble]", default="marble")
+  .parse(args)
+
+  if (args.isEmpty)
+    program.help
+
+  val peppers = program.peppers.asInstanceOf[Boolean]
+  val pineapple = program.pineapple.asInstanceOf[Boolean]
+  val bbqSauce = program.bbqSauce.asInstanceOf[Boolean]
+  val cheese = program.cheese.asInstanceOf[String]
+
+  println("you ordered a pizza with:")
+  if (peppers)
+    println("  - peppers")
+  if (pineapple)
+    println("  - pineapple")
+  if (bbqSauce)
+    println("  - bbq")
+  println("  - " + cheese + " cheese")
 ```
 
 ## Commands

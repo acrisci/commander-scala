@@ -12,23 +12,32 @@ import scala.language.dynamics
   * Example:
   *
   * <pre>
-  * object App {
-  *   def main(args: Array[String]) {
-  *     var program = new Program()
-  *       .version("0.0.1")
-  *       .option("-p, --peppers", "Add peppers")
-  *       .option("-P, --pineapple", "Add pineapple")
-  *       .option("-b, --bbq-sauce", "Add bbq sauce")
-  *       .option("-c, --cheese [type]", "Add the specified type of cheese [marble]", default="marble")
-  *       .parse(args)
+  * import com.github.acrisci.commander.Program
   *
-  *     println("you ordered a pizza with:")
-  *     if (program.peppers) println("  - peppers")
-  *     if (program.pineapple) println("  - pineapple")
-  *     if (program.bbqSauce) println("  - bbq")
-  *     println("  - " + program.cheese + " cheese")
-  *   }
-  * }
+  * var program = new Program()
+  *   .version("0.0.1")
+  *  .option("-p, --peppers", "Add peppers")
+  *  .option("-P, --pineapple", "Add pineapple")
+  *  .option("-b, --bbq-sauce", "Add bbq sauce")
+  *  .option("-c, --cheese [type]", "Add the specified type of cheese [marble]", default="marble")
+  *  .parse(args)
+  *
+  *  if (args.isEmpty)
+  *   program.help
+  *
+  *  val peppers = program.peppers.asInstanceOf[Boolean]
+  *  val pineapple = program.pineapple.asInstanceOf[Boolean]
+  *  val bbqSauce = program.bbqSauce.asInstanceOf[Boolean]
+  *  val cheese = program.cheese.asInstanceOf[String]
+  *
+  *  println("you ordered a pizza with:")
+  *  if (peppers)
+  *   println("  - peppers")
+  *  if (pineapple)
+  *   println("  - pineapple")
+  *  if (bbqSauce)
+  *   println("  - bbq")
+  *  println("  - " + cheese + " cheese")
   * </pre>
   *
   * @param exitOnError deprecated - do not use
