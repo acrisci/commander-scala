@@ -17,22 +17,22 @@ var program = new Program()
   .option("-c, --cheese [type]", "Add the specified type of cheese [marble]", default="marble")
   .parse(args)
 
-  if (args.isEmpty)
-    program.help
+if (args.isEmpty)
+  program.help
 
-  val peppers: Boolean = program.peppers
-  val pineapple: Boolean = program.pineapple
-  val bbqSauce: Boolean = program.bbqSauce
-  val cheese: String = program.cheese
+val peppers: Boolean = program.peppers
+val pineapple: Boolean = program.pineapple
+val bbqSauce: Boolean = program.bbqSauce
+val cheese: String = program.cheese
 
-  println("you ordered a pizza with:")
-  if (peppers)
-    println("  - peppers")
-  if (pineapple)
-    println("  - pineapple")
-  if (bbqSauce)
-    println("  - bbq")
-  println("  - " + cheese + " cheese")
+println("you ordered a pizza with:")
+if (peppers)
+  println("  - peppers")
+if (pineapple)
+  println("  - pineapple")
+if (bbqSauce)
+  println("  - bbq")
+println("  - " + cheese + " cheese")
 ```
 
 ## Commands
