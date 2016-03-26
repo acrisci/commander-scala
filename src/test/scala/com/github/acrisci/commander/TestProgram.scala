@@ -56,6 +56,12 @@ class TestProgram extends FlatSpec with Matchers{
           .parse(Array())
       }
     }
+
+    withClue("a program without a version given the version option should throw an error") {
+      intercept[ProgramParseException] {
+        new Program(exitOnError=false).parse(Array("--version"))
+      }
+    }
   }
 
   "Program" should "throw command errors for invalid commands" in {
@@ -132,6 +138,11 @@ Usage: TestProgram [options]
 
     assert(program.helpInformation().trim.startsWith(s"Usage: $usage"),
       "the program should have the overridden usage string")
+
+    program = new Program().parse(Array())
+
+    assert(!program.helpInformation().contains("--version"),
+      "A program with no version should not have a --version option present in the help string")
   }
 
   "Program" should "properly execute commands when given" in {

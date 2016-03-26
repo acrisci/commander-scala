@@ -46,6 +46,8 @@ class Program(exitOnError: Boolean = true, exitOnCommand: Boolean = true) extend
     */
   var version: String = ""
 
+  private def hasVersion = version != ""
+
   /**
     * A useful description to be printed in the help string of this program.
     */
@@ -380,9 +382,13 @@ class Program(exitOnError: Boolean = true, exitOnCommand: Boolean = true) extend
       .append("    ")
       .append("-h, --help".padTo(width, " ").mkString)
       .append("  output usage information\n")
-      .append("    ")
-      .append("-V, --version".padTo(width, " ").mkString)
-      .append("  output the version number\n")
+
+    if (hasVersion) {
+      help
+        .append("    ")
+        .append("-V, --version".padTo(width, " ").mkString)
+        .append("  output the version number\n")
+    }
 
     options.foreach((option) => {
       help
@@ -427,7 +433,7 @@ class Program(exitOnError: Boolean = true, exitOnCommand: Boolean = true) extend
   }
 
   private def outputVersionIfNecessary(args: Array[String]) = {
-    if (args.contains("--version") || args.contains("-V")) {
+    if (hasVersion && (args.contains("--version") || args.contains("-V"))) {
       outputVersion()
     }
   }
