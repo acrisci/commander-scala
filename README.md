@@ -52,7 +52,6 @@ Make issues on Github to report bugs or suggest new features. Let me know if you
 Here are some things that need to be done.
 
 * Publish to Maven (and release)
-* Examples
 * Rethink selectDynamic implementation
 * Set no help
 * Code cleanup
