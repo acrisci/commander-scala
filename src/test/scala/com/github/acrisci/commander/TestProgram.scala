@@ -1,6 +1,7 @@
 package com.github.acrisci.commander
 
 import better.files._
+import com.github.acrisci.commander.errors.ProgramParseException
 import org.scalatest.{Matchers, FlatSpec}
 
 class TestProgram extends FlatSpec with Matchers{

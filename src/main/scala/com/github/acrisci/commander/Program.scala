@@ -1,5 +1,7 @@
 package com.github.acrisci.commander
 
+import com.github.acrisci.commander.errors.ProgramParseException
+
 import scala.language.dynamics
 
 /**
