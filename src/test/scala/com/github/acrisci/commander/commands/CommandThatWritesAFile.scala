@@ -1,4 +1,4 @@
-package com.github.acrisci.commander
+package com.github.acrisci.commander.commands
 
 import better.files._
 

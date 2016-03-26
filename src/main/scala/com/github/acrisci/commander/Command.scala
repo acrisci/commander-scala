@@ -1,10 +1,22 @@
 package com.github.acrisci.commander
 
-import java.io.PrintStream
-import java.util
+import com.github.acrisci.commander.errors.InvalidCommandException
 
 private class Command(val klass: Class[_], var usage: String, val description: String) {
   var name = ""
+
+  private val methods = klass.getMethods
+
+  if (!methods.exists(_.getName == "main"))
+    throw new InvalidCommandException(s"Command ${klass.getName} does not contain a main method")
+
+  private val mainMethod = methods.filter(_.getName == "main").head
+
+  if (mainMethod.getParameterCount != 1 ||
+    mainMethod.getParameterTypes.head != classOf[Array[String]] ||
+    mainMethod.getReturnType != classOf[Unit]) {
+    throw new InvalidCommandException(s"Command ${klass.getName} contains an invalid main method (must be main(args: Array[String]): Unit)")
+  }
 
   if (usage != "") {
     // try determine command name from usage
@@ -24,8 +36,7 @@ private class Command(val klass: Class[_], var usage: String, val description: S
     // XXX why do I have to nop it or I get NoSuchMethodError?
     def nop(any: Any) = {}
 
-    // TODO: handle NoSuchMethodError nicely
-    nop(klass.getMethods.filter(_.getName == "main").head.invoke(klass.newInstance(), args))
+    nop(mainMethod.invoke(klass.newInstance(), args))
   }
 
   private def toHyphenCase(name: String) = {

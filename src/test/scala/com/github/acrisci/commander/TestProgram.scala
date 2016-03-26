@@ -1,7 +1,8 @@
 package com.github.acrisci.commander
 
 import better.files._
-import com.github.acrisci.commander.errors.ProgramParseException
+import com.github.acrisci.commander.commands.{CommandWithInvalidMain, CommandThatHasNoMain, CommandThatDoesNothing, CommandThatWritesAFile}
+import com.github.acrisci.commander.errors.{InvalidCommandException, ProgramParseException}
 import org.scalatest.{Matchers, FlatSpec}
 
 class TestProgram extends FlatSpec with Matchers{
@@ -20,7 +21,7 @@ class TestProgram extends FlatSpec with Matchers{
       .option("-n, --num [num]", "Number of pizzas", default=1, fn=_.toInt)
   }
 
-  "Program" should "throw errors" in {
+  "Program" should "throw parse errors for invalid options" in {
     withClue("coercion to int should throw an exception when invalid number is given") {
       intercept[NumberFormatException] {
         // default program behavior should exit instead of throw the exception.
@@ -53,6 +54,20 @@ class TestProgram extends FlatSpec with Matchers{
         new Program(exitOnError=false)
           .option("-r, --required-option", "A required option", required=true)
           .parse(Array())
+      }
+    }
+  }
+
+  "Program" should "throw command errors for invalid commands" in {
+    withClue("A command with a given class that has no main method should throw an error") {
+      intercept[InvalidCommandException] {
+        new Program().command(classOf[CommandThatHasNoMain]).parse(Array())
+      }
+    }
+
+    withClue("A command given a class with an invalid main method should throw an error") {
+      intercept[InvalidCommandException] {
+        new Program().command(classOf[CommandWithInvalidMain]).parse(Array())
       }
     }
   }

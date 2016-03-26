@@ -53,9 +53,7 @@ Here are some things that need to be done.
 
 * Publish to Maven
 * Examples
-* Validate commands
 * Rethink selectDynamic implementation
-* Override usage
 * Set no version/help
 
 ## License
