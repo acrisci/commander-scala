@@ -89,6 +89,7 @@ Here are some things that need to be done.
 * Cleanup program constructor args (debug mode for tests?)
 * Promotion
 * Command name duplicates
+* Provide an action, options, and description for commands
 
 ## License
 
