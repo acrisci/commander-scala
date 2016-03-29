@@ -30,6 +30,33 @@ if (program.bbqSauce)
 println("  - " + program.cheese + " cheese")
 ```
 
+## Type Coercion
+
+To coerce an option to a certain type, you can add a coercion function with the `fn` parameter. The coercion function should take the string given as input and coerce it to the type you want. Then you can then access the option on the Program as that type by providing a type tag.
+
+```scala
+val program = new Program()
+  .version("0.0.1")
+  .description("A program that can sum or multiply a list of numbers")
+  .option("-o, --operation [operation]", "The operation to perform on the numbers [sum|multiply]", default="sum")
+  .option("-n, --numbers <numbers>", "Comma-separated list of numbers", fn=_.split(",").map(_.toInt))
+  .parse(args)
+
+if (args.isEmpty)
+  program.help()
+
+if (program.operation.equals("sum")) {
+  val sum = program.numbers[Array[Int]].sum
+  println(s"the sum is $sum")
+} else if (program.operation.equals("multiply")) {
+  val product = program.numbers[Array[Int]].product
+  println(s"the product is $product")
+} else {
+  println("Operation must be either 'sum' or 'multiply'")
+  System.exit(1)
+}
+```
+
 ## Commands
 
 You can define commands on your program like this:
