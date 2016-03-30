@@ -2,6 +2,12 @@
 
 A scalable command-line parser inspired by [commander.js](https://github.com/tj/commander.js).
 
+Commander-scala is available on [Maven Central](http://mvnrepository.com/artifact/com.github.acrisci/commander_2.11).
+
+```scala
+libraryDependencies += "com.github.acrisci" % "commander_2.11" % "0.1.0"
+```
+
 ## Option parsing
 
  Options with commander are defined with the `.option()` method, also serving as documentation for the options. The example below parses args and options from `args`, leaving remaining args as the `program.args` array which were not consumed by options. Options will be set on the `program` dynamically based on the camelcased form of the long opt.
@@ -82,7 +88,6 @@ Make issues on Github to report bugs or suggest new features. Let me know if you
 
 Here are some things that need to be done.
 
-* Publish to Maven (and release)
 * Set no help
 * Code cleanup
 * Test `--help` option and `help` command
